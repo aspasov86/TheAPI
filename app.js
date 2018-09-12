@@ -1,5 +1,6 @@
 const express = require('express');
 const app = express();
+const path = require('path');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -14,6 +15,7 @@ app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.use(express.static(path.join(__dirname, 'frontend')));
 
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -25,8 +27,11 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/majstors', majstorsRoutes);
-app.use('/users', usersRoutes);
+app.get('/api', (req, res) => res.send('Hello World!'));
+app.use('/api/majstors', majstorsRoutes);
+app.use('/api/users', usersRoutes);
+
+app.get('/*', (req, res) => res.sendFile(path.join(__dirname, 'frontend', 'index.html')));
 
 app.use((req, res, next) => {
     const error = new Error('Not Found');
