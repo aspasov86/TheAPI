@@ -67,6 +67,8 @@ router.get('/', async (req, res, next) => {
 router.post('/', checkAuth, upload.single('image'), async (req, res, next) => {
     const { firstName, lastName, email, phoneNumber, occupation, place,
     brzina, pedantnost, cena, ljubaznost } = req.body;
+    console.log('req', Object.keys(req).sort());
+    console.log('req.file', req.file);
     const majstor = new Majstor({
         _id: new mongoose.Types.ObjectId(),
         image: req.file.path,
